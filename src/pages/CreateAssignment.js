@@ -1,38 +1,36 @@
-import { useState } from "react";
-import Menu from "../components/Menu";
+import { useState } from "react"
+import fetch from "node-fetch"
 
 function CreateAssignment() {
-    const [id, setId] = useState(0);
-    const [name, setName] = useState("");
-    const [date, setDate] = useState("");
 
-    const handleForm = async () => {
-        fetch('http://localhost:8081/assignment', {
-            method: 'POST',
+    const [ courseID, setCourseID ] = useState("")
+    const [ name, setName ] = useState("")
+    const [ dueDate, setDueDate ] = useState("")
+
+    const handleSubmit = async (event) => {
+        fetch("http://localhost:8081/assignment", {
+            method: "POST",
             headers: {
-                'Content-Type': 'application/json'
+                "Content-Type": "application/json"
             },
             body: JSON.stringify({
+                course_id: courseID,
                 name: name,
-                course_id: id,
-                dueDate: date
+                dueDate: dueDate
             })
         })
     }
 
     return (
         <>
-        <Menu currentPage='Home'></Menu>
-        <div>
-            <form onSubmit={handleForm}>
-                <label>Assignment Name<input type='text' onChange={(e) => {setName(e.target.value)}}></input></label>
-                <label>Course ID<input type='number' onChange={(e) => {setId(e.target.value)}}></input></label>
-                <label>Due Date<input type='date' onChange={(e) => {setDate(e.target.value)}}></input></label>
-                <button>Create</button>
+            <form onSubmit={handleSubmit}>
+                <label>Course ID<input type="text" onChange={(e) => {setCourseID(e.target.value)}}></input></label>
+                <label>Name<input type="text" onChange={(e) => {setName(e.target.value)}}></input></label>
+                <label>Due Date<input type="date" onChange={(e) => {setDueDate(e.target.value)}}></input></label>
+                <button>Submit</button>
             </form>
-        </div>
         </>
     )
 }
 
-export default CreateAssignment;
+export default CreateAssignment
