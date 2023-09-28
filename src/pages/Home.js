@@ -15,15 +15,15 @@ function Home() {
     const fetchAssignments = () => {
         fetch(`${SERVER_URL}/assignment`)
             .then((response) => response.json() ) 
-            .then((data) => { 
-                console.log("assignment length "+data.length);
+            .then((data) => {
                 setAssignments(data);
             }) 
         .catch(err => console.error(err)); 
     }
 
-    const deleteAssignment = (id) => {
-        fetch(`${SERVER_URL}/assignment/${id}`, { method: 'DELETE' })
+    const deleteAssignment = (id, force) => {
+        console.log(`Force: ${force}`)
+        fetch(`${SERVER_URL}/assignment/${id}?force=${force}`, { method: 'DELETE' })
             .then((response) => response.json())
             .then((data) => {
                 if(!data) {
