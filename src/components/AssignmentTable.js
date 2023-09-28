@@ -1,22 +1,12 @@
-import { Link } from "react-router-dom";
+import Assignment from "./Assignment";
 
-function AssignmentTable() {
+function AssignmentTable(props) {
     return (
-        <>
-            <Link to="/create-assignment">+</Link>
-            <table>
-                <tr>
-                    <th>Course ID</th>
-                    <th>Name</th>
-                    <th>Due Date</th>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>Homework 1</td>
-                    <td>2023-9-18</td>
-                </tr>
-            </table>
-        </>
+        <div className="assignmentWrapper">
+               {props.assignments.map((assignment, i) => (
+                 <Assignment assignment={assignment} />
+               ))}
+        </div>
     )
 }
 

@@ -1,11 +1,16 @@
 import { useState } from "react"
 import fetch from "node-fetch"
 
+import AssignmentForm from "../components/AssignmentForm"
+import { useNavigate } from "react-router-dom"
+import Menu from "../components/Menu"
+
 function CreateAssignment() {
 
-    const [ courseID, setCourseID ] = useState("")
+    const [ courseID, setCourseID ] = useState(0)
     const [ name, setName ] = useState("")
     const [ dueDate, setDueDate ] = useState("")
+    const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
         fetch("http://localhost:8081/assignment", {
@@ -14,22 +19,24 @@ function CreateAssignment() {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                course_id: courseID,
-                name: name,
+                courseId: courseID,
+                assignmentName: name,
                 dueDate: dueDate
             })
+        }).then(() => {
+            navigate(-2)
         })
     }
 
     return (
         <>
-            <form onSubmit={handleSubmit}>
-                <label>Course ID<input type="text" onChange={(e) => {setCourseID(e.target.value)}}></input></label>
-                <label>Name<input type="text" onChange={(e) => {setName(e.target.value)}}></input></label>
-                <label>Due Date<input type="date" onChange={(e) => {setDueDate(e.target.value)}}></input></label>
-                <button>Submit</button>
-            </form>
+            <Menu />
+            <div className="assignmentForm">
+                <h3>Create Assignment</h3>
+                <AssignmentForm handleSubmit={handleSubmit} setCourseID={setCourseID} courseId={courseID} setName={setName} name={name} setDueDate={setDueDate} dueDate={dueDate} />
+            </div>
         </>
+        
     )
 }
 
