@@ -7,13 +7,17 @@ import fetch from "node-fetch"
 function Home() {
     const [assignments, setAssignments] = useState([]);
 
+    const token = sessionStorage.getItem("jwt");
+
     useEffect(() => {
     // called once after intial render
     fetchAssignments();
-    })
+    }, [])
     
     const fetchAssignments = () => {
-        fetch(`${SERVER_URL}/assignment`)
+        fetch(`${SERVER_URL}/assignment`, {
+            headers: {'Authorization' : token}
+        })
             .then((response) => response.json() ) 
             .then((data) => {
                 setAssignments(data);
@@ -23,7 +27,7 @@ function Home() {
 
     const deleteAssignment = (id, force) => {
         console.log(`Force: ${force}`)
-        fetch(`${SERVER_URL}/assignment/${id}?force=${force}`, { method: 'DELETE' })
+        fetch(`${SERVER_URL}/assignment/${id}?force=${force}`, { method: 'DELETE', headers: {'Authorization' : token} })
             .then((response) => response.json())
             .then((data) => {
                 if(!data) {

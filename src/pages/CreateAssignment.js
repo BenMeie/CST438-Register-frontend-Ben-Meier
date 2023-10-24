@@ -12,11 +12,14 @@ function CreateAssignment() {
     const [ dueDate, setDueDate ] = useState("")
     const navigate = useNavigate();
 
+    const token = sessionStorage.getItem("jwt");
+
     const handleSubmit = async (event) => {
         fetch("http://localhost:8081/assignment", {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization": token
             },
             body: JSON.stringify({
                 courseId: courseID,

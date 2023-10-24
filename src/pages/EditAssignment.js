@@ -7,7 +7,6 @@ import { SERVER_URL } from "../constants"
 import Menu from "../components/Menu"
 
 function EditAssignment() {
-
     const [ courseID, setCourseID ] = useState(0)
     const [ name, setName ] = useState("")
     const [ dueDate, setDueDate ] = useState("")
@@ -18,13 +17,17 @@ function EditAssignment() {
     const s = /\d+$/.exec(path)[0];
     assignmentId=s;
 
+    const token = sessionStorage.getItem("jwt");
+
     useEffect(() => {
         getAssignment();
     })
 
 
     const getAssignment = async () => {
-        fetch(`${SERVER_URL}/assignment/${assignmentId}`)
+        fetch(`${SERVER_URL}/assignment/${assignmentId}`, {
+            headers: {'Authorization' : token}
+        })
             .then(response => response.json())
             .then(data => {
                 setCourseID(data.courseId)
@@ -37,7 +40,8 @@ function EditAssignment() {
         fetch(`http://localhost:8081/assignment/${assignmentId}`, {
             method: "PUT",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                'Authorization' : token
             },
             body: JSON.stringify({
                 courseId: courseID,
@@ -45,7 +49,7 @@ function EditAssignment() {
                 dueDate: dueDate
             })
         }).then(() => {
-            navigate(-2)
+            navigate("/")
         })
     }
 
@@ -56,7 +60,7 @@ function EditAssignment() {
             <h3>Edit Assignment</h3>
             <AssignmentForm handleSubmit={handleSubmit} setCourseID={setCourseID} courseId={courseID} setName={setName} name={name} setDueDate={setDueDate} dueDate={dueDate} />
         </div>
-        </>
+    </>
         
     )
 }

@@ -23,7 +23,7 @@ function Assignment(props) {
                 <Link className="genericButton" to={"/grade-assignment/" + assignment.id}>Grade</Link>
                 <Link className="genericButton" to={"/edit-assignment/" + assignment.id}>Edit</Link>
                 <button className="deleteButton" onClick={() => props.deleteAssignment(assignment.id, force)}>Delete</button>
-                <label>Force?<input type="checkbox" onChange={() => {setForce(!force)}}></input></label>
+                <label>Force?<input name="force" type="checkbox" onChange={() => {setForce(!force)}}></input></label>
             </div>
         </div>
     )
