@@ -1,23 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import Home from './pages/Home';
+import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { Route, Routes, BrowserRouter } from 'react-router-dom';
-import CreateAssignment from './pages/CreateAssignment';
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
-    <Routes>
-      <Route exact path='/'>
-        <Home />  
-      </Route>
-      <Route exact path='/createAssignment'>
-        <CreateAssignment />
-      </Route>
-    </Routes>
-    </BrowserRouter>
+    <App />
   </React.StrictMode>
 );
 

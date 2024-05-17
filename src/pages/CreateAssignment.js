@@ -1,38 +1,46 @@
-import { useState } from "react";
-import Menu from "../components/Menu";
+import { useState } from "react"
+import fetch from "node-fetch"
+
+import AssignmentForm from "../components/AssignmentForm"
+import { useNavigate } from "react-router-dom"
+import Menu from "../components/Menu"
 
 function CreateAssignment() {
-    const [id, setId] = useState(0);
-    const [name, setName] = useState("");
-    const [date, setDate] = useState("");
 
-    const handleForm = async () => {
-        fetch('http://localhost:8081/assignment', {
-            method: 'POST',
+    const [ courseID, setCourseID ] = useState(0)
+    const [ name, setName ] = useState("")
+    const [ dueDate, setDueDate ] = useState("")
+    const navigate = useNavigate();
+
+    const token = sessionStorage.getItem("jwt");
+
+    const handleSubmit = async (event) => {
+        fetch("http://localhost:8081/assignment", {
+            method: "POST",
             headers: {
-                'Content-Type': 'application/json'
+                "Content-Type": "application/json",
+                "Authorization": token
             },
             body: JSON.stringify({
-                name: name,
-                course_id: id,
-                dueDate: date
+                courseId: courseID,
+                assignmentName: name,
+                dueDate: dueDate
             })
+        }).then(() => {
+            navigate(-2)
         })
     }
 
     return (
         <>
-        <Menu currentPage='Home'></Menu>
-        <div>
-            <form onSubmit={handleForm}>
-                <label>Assignment Name<input type='text' onChange={(e) => {setName(e.target.value)}}></input></label>
-                <label>Course ID<input type='number' onChange={(e) => {setId(e.target.value)}}></input></label>
-                <label>Due Date<input type='date' onChange={(e) => {setDate(e.target.value)}}></input></label>
-                <button>Create</button>
-            </form>
-        </div>
+            <Menu />
+            <div className="assignmentForm">
+                <h3>Create Assignment</h3>
+                <AssignmentForm handleSubmit={handleSubmit} setCourseID={setCourseID} courseId={courseID} setName={setName} name={name} setDueDate={setDueDate} dueDate={dueDate} />
+            </div>
         </>
+        
     )
 }
 
-export default CreateAssignment;
+export default CreateAssignment

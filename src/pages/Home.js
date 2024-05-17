@@ -1,25 +1,49 @@
-import { useState } from 'react';
-import Assignments from '../components/Assignments';
-import Menu from '../components/Menu';
-import '../styles/global.css';
-
-async function getAssignments() {
-  // let response = await fetch('http://localhost:8081/assignment');
-  // let data = await response.json();
-  // console.log(data)
-}
+import { useEffect, useState } from "react"
+import AssignmentTable from "../components/AssignmentTable"
+import Menu from "../components/Menu"
+import { SERVER_URL } from "../constants"
+import fetch from "node-fetch"
 
 function Home() {
-  // const [assignments, setAssignments] = useState([]);
-  let assignments = []
-  getAssignments();
+    const [assignments, setAssignments] = useState([]);
 
-  return (
-    <>
-      <Menu currentPage='Home'></Menu>
-      <Assignments assignments={assignments} canModify={true}></Assignments>
-    </>
-  );
+    const token = sessionStorage.getItem("jwt");
+
+    useEffect(() => {
+    // called once after intial render
+    fetchAssignments();
+    }, [])
+    
+    const fetchAssignments = () => {
+        fetch(`${SERVER_URL}/assignment`, {
+            headers: {'Authorization' : token}
+        })
+            .then((response) => response.json() ) 
+            .then((data) => {
+                setAssignments(data);
+            }) 
+        .catch(err => console.error(err)); 
+    }
+
+    const deleteAssignment = (id, force) => {
+        console.log(`Force: ${force}`)
+        fetch(`${SERVER_URL}/assignment/${id}?force=${force}`, { method: 'DELETE', headers: {'Authorization' : token} })
+            .then((response) => response.json())
+            .then((data) => {
+                if(!data) {
+                    
+                } else {
+                    fetchAssignments();
+                }
+            })
+    }
+
+    return (
+        <>
+            <Menu />
+            <AssignmentTable assignments={assignments} deleteAssignment={deleteAssignment} />
+        </>
+    )
 }
 
-export default Home;
+export default Home
